@@ -1,5 +1,13 @@
 # FreeAgent puts the powerline style in zsh !
 
+function hg_prompt_info {
+    hg prompt --angle-brackets "\
+<hg:%{$fg[yellow]%}<branch>>\
+</%{$fg[yellow]%}<tags|, %{$fg[yellow]%}>>\
+%{$fg[red]%}<status|modified|unknown><update>%{$reset_color%}<
+patches: <patches|join( → )|pre_applied(%{$fg[yellow]%})|post_applied(%{$reset_color%})|pre_unapplied(%{$fg_bold[black]%})|post_unapplied(%{$reset_color%})>>" 2>/dev/null
+}
+
 if [ "$POWERLINE_RIGHT_B" = "" ]; then
   POWERLINE_RIGHT_B=%D{%H:%M:%S}
 fi
@@ -14,10 +22,14 @@ if [ "$POWERLINE_FULL_CURRENT_PATH" = "" ]; then
   POWERLINE_CURRENT_PATH="%1~"
 fi
 
+
+POWERLINE_GIT_INFO_LEFT=""
+POWERLINE_GIT_INFO_RIGHT=""
+
 POWERLINE_GIT_INFO_LEFT=""
 POWERLINE_GIT_INFO_RIGHT="%F{red}"$'\u2b82'"%F{black}%K{red}"$'$(git_prompt_info)'" %f"
 if [ "$POWERLINE_SHOW_GIT_ON_RIGHT" = "" ]; then
-    POWERLINE_GIT_INFO_LEFT=$'$(git_prompt_info)'
+    POWERLINE_GIT_INFO_LEFT=$'$(git_prompt_info)$(hg_prompt_info)'
     POWERLINE_GIT_INFO_RIGHT=""
 fi
 
